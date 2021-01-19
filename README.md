@@ -10,6 +10,7 @@
 - pip install -r requirements.txt
 
 ## create database
+
 ### for sqlite 
 - nothing to do
 
@@ -19,8 +20,9 @@
 	- cancel commented-out code and comment other default code in DATABASE dict
 
 ## run the app
-- python manage.py makemigrations
-- python manage.py migrate
-- python maxo/orders/data/import_data.py
+- python manage.py makemigrations orders
+- python manage.py makemigrations admin
+- python manage.py migrate orders
+- python manage.py migrate admin
+- python import_data.py
 - python manage.py runserver 0.0.0.0:8000 &
-

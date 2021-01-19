@@ -62,14 +62,15 @@ class ViewsMTop10Admin(ImportExportModelAdmin):
             return response
         month_order_static = qs.annotate(month=TruncMonth('order_date')).values("month").order_by("month").annotate(
             nums=Count("month"))
-        top10 = qs.values_list("customer_id").annotate(order_nums=Count('customer_id')).order_by("-order_nums")
-        customer_ids = [customer[0] for customer in top10[:10]]
-        top10_customers = [qs.filter(customer_id=customer_id)[1] for customer_id in customer_ids]
+        if hasattr(qs[0], "street_address"):
+            top10 = qs.values("customer_id", "country", "city", "street_address", "name").annotate(
+                order_nums=Count('customer_id')).order_by("-order_nums")
+        else:
+            top10 = qs.values("customer_id", "country", "city", "address_line_1", "name").annotate(
+                order_nums=Count('customer_id')).order_by("-order_nums")
+        print(list(top10))
         response.context_data['month_order_static'] = month_order_static
-        response.context_data['top10_customers'] = top10_customers
-        response.context_data['orders_top10'] = list(
-            top10[:10]
-        )
+        response.context_data['top10_customers'] = top10[:10]
         return response
 
 

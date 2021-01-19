@@ -31,15 +31,17 @@
                 </thead>
                 <tbody>
                 {% for customer in top10_customers %}
-                    {% with index=forloop.counter %}
                     <tr>
                         <td class="field">{{ customer.name }}</td>
-                        <td class="field">{{ 1 }}</td>
+                        <td class="field">{{ customer.order_nums }}</td>
                         <td class="field">{{ customer.country }}</td>
                         <td class="field">{{ customer.city }}</td>
-                        <td class="field">{{  customer.address_line_1 }}</td>
+                        {% if  customer.address_line_1 %}
+                            <td class="field">{{  customer.address_line_1 }}</td>
+                        {% else %}
+                            <td class="field">{{  customer.street_address }}</td>
+                        {% endif %}
                     </tr>
-                    {% endwith %}
                 {% endfor %}
                 </tbody>
             </table>

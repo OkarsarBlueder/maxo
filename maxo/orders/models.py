@@ -6,7 +6,7 @@ class MOrders(models.Model):
     Create t_maxo_orders tables
     """
     order_id = models.CharField("ORDER_ID", max_length=150)
-    customer_id = models.CharField("ORDER_ID", max_length=150)
+    customer_id = models.CharField("CUSTOMER_ID", max_length=150)
     order_date = models.DateField("ORDER_DATE")
     ship_date = models.DateField("SHIP_DATE")
     product_id = models.CharField("PRODUCT_ID", max_length=150)

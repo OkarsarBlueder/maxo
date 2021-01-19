@@ -1,3 +1,4 @@
+import sys
 import os
 
 
@@ -19,7 +20,7 @@ def import_orders():
             order_id=order[0], customer_id=order[1], order_date=datetime.datetime.strptime(order[2], '%m/%d/%Y'),
             shipping_date=datetime.datetime.strptime(order[3], '%m/%d/%Y'), product_id=order[4],
             product_category=order[5],
-            name=order[6], gender=order[7], street_address=order[8], city=order[9], state=order[10],
+            name=order[6], gender=order[7], street_address=order[8].replace("\"", ""), city=order[9], state=order[10],
             postal_code=order[11], country=order[12]
         )
 
@@ -40,7 +41,9 @@ def import_orders():
 
 if __name__ == '__main__':
     import django
-
+    from pathlib import Path
+    base_dir = Path(__file__).resolve().parent.parent.parent.parent
+    sys.path.insert(0, os.path.join(base_dir, "maxo"))
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'maxo.settings')
     django.setup()
     import_orders()
