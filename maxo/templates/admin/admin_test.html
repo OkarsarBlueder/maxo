@@ -1,0 +1,112 @@
+{% extends 'admin/change_list.html' %}
+{% load static   %}
+{% block content_title %}
+<!-- ECharts单文件引入 -->
+<!--<script src="{% static 'js/echarts.min.js' %}"></script>-->
+{#<script src="http://echarts.baidu.com/dist/echarts.js"></script>#}
+<script crossorigin="anonymous" integrity="sha512-6JB5BcwbjvINvfF/J1slUqDUczr5/LG5eo8ODEkwDGugDLF+9bR47pFRNIdKqaZ5VSrTOexibcdrq/D0zOdBdw==" src="https://lib.baomitu.com/echarts/5.0.0/echarts.js"></script>
+{% endblock %}
+{% block title %}Orders Static{% endblock %}
+{% block result_list %}
+        <div style="height: 400px; width: 40%;">
+            <table id="result">
+                <thead>
+                <tr>
+                    <th scope="col" class="column-order_id">
+                        <div class="text">CUSTOMER_NAME</div>
+                    </th>
+                    <th scope="col" class="column-order_id">
+                        <div class="text">ORDER_NUMBERS</div>
+                    </th>
+                    <th scope="col" class="column-order_id">
+                        <div class="text">COUNTRY</div>
+                    </th>
+                    <th scope="col" class="column-order_id">
+                        <div class="text">CITY</div>
+                    </th>
+                    <th scope="col" class="column-order_id">
+                        <div class="text"><span >ADDRESS</span></div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for customer in top10_customers %}
+                    {% with index=forloop.counter %}
+                    <tr>
+                        <td class="field">{{ customer.name }}</td>
+                        <td class="field">{{ 1 }}</td>
+                        <td class="field">{{ customer.country }}</td>
+                        <td class="field">{{ customer.city }}</td>
+                        <td class="field">{{  customer.address_line_1 }}</td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div id="mains" style="height:400px; width: 40%;"></div>
+<script>
+    let myChart = echarts.init(document.getElementById('mains'));
+    let data1 = [];
+    let data2 = [];
+    {% for month in month_order_static %}
+        data1.push("{{ month.month|date:"Y-m-d"}}");
+        data2.push({{ month.nums }});
+    {% endfor %}
+    myChart.setOption({
+        toolbox: {
+            show: true,
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        title: {
+            text: 'Every Month Orders'
+        },
+        tooltip: {
+            trigger: 'axis',
+        },
+        legend: {
+            data: ['Orders']
+        },
+
+        xAxis: [
+            {
+                type: 'category',
+                data: data1,
+                axisLabel: {
+                    show: true,
+                    interval: 0,    // {number}表示隔几个标签显示一个标签
+                    rotate: 60,
+                    textStyle: {
+                        color: 'green',
+                        fontFamily: 'sans-serif',
+                        fontSize: 10,
+                        fontStyle: 'italic',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+        ],
+        yAxis: [
+            {
+                type: 'value',
+            }
+        ],
+        series: [
+            {
+                name: 'Orders',
+                type: 'bar',
+                data: data2,
+            },
+        ]
+    });
+</script>
+{% endblock %}
+{% block pagination %}{% endblock %}
